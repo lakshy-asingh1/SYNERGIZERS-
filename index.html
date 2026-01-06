@@ -1,1 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | Online Quiz Platform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="border">
+    <section id="features" class="features container">
+      <h2>What we offer</h2>
+      <p class="muted">A modern suite of features designed for learners and educators.</p>
+
+      <ul class="features-list" aria-label="Features">
+        <li class="feature">
+          <div class="feature-icon">📚</div>
+          <div class="feature-content">
+            <h3>Interactive Courses</h3>
+            <p>Structured lessons with multimedia to keep learners engaged.</p>
+          </div>
+        </li>
+
+        <li class="feature">
+          <div class="feature-icon">🧭</div>
+          <div class="feature-content">
+            <h3>Personalized Paths</h3>
+            <p>Adaptive learning paths tailored to each student's needs.</p>
+          </div>
+        </li>
+
+        <li class="feature">
+          <div class="feature-icon">📈</div>
+          <div class="feature-content">
+            <h3>Progress Tracking</h3>
+            <p>Track performance with detailed dashboards and analytics.</p>
+          </div>
+        </li>
+
+        <li class="feature">
+          <div class="feature-icon">📝</div>
+          <div class="feature-content">
+            <h3>Quizzes & Assessments</h3>
+            <p>Automated quizzes with instant feedback and scoring.</p>
+          </div>
+        </li>
+
+        <li class="feature">
+          <div class="feature-icon">🎓</div>
+          <div class="feature-content">
+            <h3>Certifications</h3>
+            <p>Issue certificates upon course completion to showcase achievements.</p>
+          </div>
+        </li>
+        <li class="feature">
+          <div class="feature-icon">🤝</div>
+          <div class="feature-content">
+            <h3>Community Support</h3>
+            <p>Forums and groups to collaborate and discuss topics.</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+</div>
+<div class="login-card">
+    <h2>Create Account</h2>
+    <p>Sign up as a student</p>
+
+    <input type="text" id="newUsername" placeholder="Username">
+    <input type="password" id="newPassword" placeholder="Password">
+
+    <button onclick="signup()">Sign Up</button>
+
+    <p>
+        Already have an account?
+        <a href="signup.html">Login</a>
+    </p>
+
+    <p id="error"></p>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
 
