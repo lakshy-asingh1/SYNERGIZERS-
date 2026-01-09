@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Genin-Path | Forgot Password</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:system-ui, sans-serif;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#f6f7fb;
+}
+
+.card{
+  width:100%;
+  max-width:420px;
+  background:#fff;
+  padding:28px;
+  border-radius:12px;
+  box-shadow:0 12px 35px rgba(0,0,0,0.15);
+}
+
+.card h2{
+  text-align:center;
+  margin-bottom:22px;
+  color:#4f6da5;
+}
+
+.input-group{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+input{
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-size:14px;
+}
+
+input:focus{
+  outline:none;
+  border-color:#6254fc;
+}
+
+button{
+  padding:12px;
+  border-radius:8px;
+  border:none;
+  background:#6254fc;
+  color:#fff;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+button:hover{
+  opacity:0.9;
+}
+
+.link{
+  margin-top:14px;
+  text-align:center;
+  font-size:13px;
+}
+
+.link a{
+  color:#6254fc;
+  text-decoration:none;
+}
+
+@media(max-width:480px){
+  .card{
+    margin:0 15px;
+    padding:22px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>Forgot Password</h2>
+
+  <div class="input-group">
+    <input type="email" id="email" placeholder="Enter registered email">
+
+    <div id="resetBox" style="display:none;">
+      <input type="password" id="newpass" placeholder="New password">
+      <button onclick="resetPassword()">Reset Password</button>
+    </div>
+
+    <button onclick="verifyEmail()">Verify Email</button>
+  </div>
+
+  <div class="link">
+    <a href="index.html">Back to Login</a>
+  </div>
+</div>
+
+<script>
+let userIndex = -1;
+
+if(!localStorage.getItem("users")){
+  localStorage.setItem("users", JSON.stringify([]));
+}
+
+function verifyEmail(){
+  const email = document.getElementById("email").value.trim().toLowerCase();
+  const users = JSON.parse(localStorage.getItem("users"));
+
+  if(!email){
+    alert("Please enter your email");
+    return;
+  }
+
+  userIndex = users.findIndex(u => u.email === email);
+
+  if(userIndex === -1){
+    alert("Email not registered");
+    window.location.href = "signup.html";
+    return;
+  }
+
+  alert("Email verified");
+  document.getElementById("resetBox").style.display = "block";
+}
+
+function resetPassword(){
+  const newPass = document.getElementById("newpass").value.trim();
+  const users = JSON.parse(localStorage.getItem("users"));
+
+  if(!newPass){
+    alert("Password cannot be empty");
+    return;
+  }
+
+  users[userIndex].password = newPass;
+  localStorage.setItem("users", JSON.stringify(users));
+
+  alert("Password updated successfully");
+  window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>

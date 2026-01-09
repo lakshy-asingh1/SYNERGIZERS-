@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Profile | Genin-Path</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:system-ui,sans-serif;
+  background:#f6f7fb;
+}
+header{
+  background:linear-gradient(90deg,#6254fc,#4f6da5);
+  padding:14px 20px;
+}
+.nav{
+  max-width:1200px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:#fff;
+}
+.container{
+  max-width:900px;
+  margin:40px auto;
+  padding:16px;
+}
+.card{
+  background:#fff;
+  padding:24px;
+  border-radius:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+.card h3{
+  margin-bottom:18px;
+  color:#4f8cff;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px 20px;
+}
+.grid label{
+  font-size:12px;
+  color:#888;
+}
+.grid input,.grid select{
+  width:100%;
+  padding:10px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  font-size:14px;
+}
+.grid .full{
+  grid-column:1/-1;
+}
+.actions{
+  margin-top:22px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+button{
+  padding:10px 18px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+}
+.edit{background:#0d6efd;color:#fff;}
+.save{background:#23c547;color:#fff;}
+.cancel{background:#adb5bd;color:#000;}
+.logout{background:#dc3545;color:#fff;}
+@media(max-width:640px){
+  .grid{grid-template-columns:1fr;}
+  .actions{flex-direction:column;}
+  button{width:100%;}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="nav">
+    <strong>📘 Genin-Path</strong>
+    <button class="logout" onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<div class="container">
+  <div class="card">
+    <h3>Profile</h3>
+
+    <div class="grid">
+      <div>
+        <label>Full Name</label>
+        <input id="fullName" disabled>
+      </div>
+      <div>
+        <label>Email</label>
+        <input id="email" disabled>
+      </div>
+      <div>
+        <label>Class / Program</label>
+        <input id="className" disabled>
+      </div>
+      <div>
+        <label>DOB</label>
+        <input type="date" id="dob" disabled>
+      </div>
+      <div>
+        <label>Gender</label>
+        <select id="gender" disabled>
+          <option value="">Select</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div>
+        <label>Phone</label>
+        <input id="phone" disabled>
+      </div>
+      <div class="full">
+        <label>Address</label>
+        <input id="address" disabled>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="edit" id="editBtn" onclick="enableEdit()">Edit</button>
+      <button class="save" id="saveBtn" onclick="saveProfile()" hidden>Save</button>
+      <button class="cancel" id="cancelBtn" onclick="cancelEdit()" hidden>Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function readValue(key){
+  const raw = localStorage.getItem(key)
+  if(!raw) return null
+  try{ return JSON.parse(raw) }catch{ return raw }
+}
+
+function getCurrentUser(){
+  const stored = readValue("currentUser") || readValue("loggedInUser")
+  if(!stored) return null
+  if(typeof stored === "object") return stored
+
+  const users = readValue("users") || []
+  const key = String(stored).toLowerCase()
+  return users.find(u =>
+    (u.email && u.email.toLowerCase() === key) ||
+    (u.username && u.username.toLowerCase() === key) ||
+    (u.name && u.name.toLowerCase() === key)
+  ) || { email: stored, username: stored, name: stored }
+}
+
+const user = getCurrentUser()
+if(!user) location.href = "index.html"
+
+const fields = ["fullName","email","className","dob","gender","phone","address"]
+const el = id => document.getElementById(id)
+
+el("fullName").value = user.fullName || user.name || ""
+el("email").value = user.email || user.username || ""
+el("className").value = user.class || ""
+el("dob").value = user.dob || ""
+el("gender").value = user.gender || ""
+el("phone").value = user.phone || ""
+el("address").value = user.address || ""
+
+let backup = {}
+
+function enableEdit(){
+  fields.forEach(f=>{
+    backup[f] = el(f).value
+    el(f).disabled = false
+  })
+  el("email").disabled = true
+  el("editBtn").hidden = true
+  el("saveBtn").hidden = false
+  el("cancelBtn").hidden = false
+}
+
+function cancelEdit(){
+  fields.forEach(f=>{
+    el(f).value = backup[f] || ""
+    el(f).disabled = true
+  })
+  el("editBtn").hidden = false
+  el("saveBtn").hidden = true
+  el("cancelBtn").hidden = true
+}
+
+function saveProfile(){
+  user.fullName = el("fullName").value
+  user.class = el("className").value
+  user.dob = el("dob").value
+  user.gender = el("gender").value
+  user.phone = el("phone").value
+  user.address = el("address").value
+
+  localStorage.setItem("currentUser", JSON.stringify(user))
+
+  let users = readValue("users") || []
+  users = users.map(u =>
+    u.email === user.email || u.username === user.username ? user : u
+  )
+  localStorage.setItem("users", JSON.stringify(users))
+
+  cancelEdit()
+}
+
+function logout(){
+  localStorage.removeItem("currentUser")
+  localStorage.removeItem("loggedInUser")
+  location.href = "index.html"
+}
+</script>
+
+</body>
+</html>

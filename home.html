@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Genin-Path Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="home.css" />
+</head>
+
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <h2 class="logo">Genin-Path<span>.</span></h2>
+      <nav>
+        <a onclick="showDashboard()">Dashboard</a>
+        <a onclick="showAllCourses()">Courses</a>
+        <a onclick="showProgress()">Progress</a>
+        <a href="student.html">Students</a>
+        <a href="profile.html">Profile</a>
+      </nav>
+
+      <div class="upgrade">
+        <p>Upgrade your account to Pro</p>
+        <button>Upgrade</button>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div class="welcome">
+          <h1>Welcome back </h1>
+          <span id="username" style="font-size: 20px; font-weight: bold;">Lakshya</span>
+        </div>
+
+        <div class="top-actions">
+          <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+      </header>
+      <section>
+        <h3>Popular This Week</h3>
+
+        <div class="popular">
+          <div class="popular-card" onclick="filterCategory('Design')">
+            <span class="icon">🎨</span>
+            <span class="text">Graphic Design</span>
+          </div>
+
+          <div class="popular-card" onclick="filterCategory('Programming')">
+            <span class="icon">💻</span>
+            <span class="text">Programming</span>
+          </div>
+
+          <div class="popular-card" onclick="filterCategory('Soft Skill')">
+            <span class="icon">🧠</span>
+            <span class="text">Soft Skills</span>
+          </div>
+
+          <div class="popular-card" onclick="filterCategory('Science')">
+            <span class="icon">🔬</span>
+            <span class="text">Science</span>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h3 id="courseTitle">All Courses</h3>
+
+        <input type="search" id="searchBox" placeholder="Search courses..." onkeyup="searchCourse()" style="
+          padding:12px;
+          width:100%;
+          margin:12px 0 20px;
+          border-radius:10px;
+          border:1px solid #ddd;
+          font-size:14px;
+        " />
+        <div class="courses" id="courseList">
+        </div>
+      </section>
+
+    </main>
+  </div>
+  <script src="home.js"></script>
+
+</body>
+
+</html>

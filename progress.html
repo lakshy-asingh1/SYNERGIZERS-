@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Progress | Genin-Path</title>
+  <link rel="stylesheet" href="home.css" />
+
+  <style>
+    .progress-page {
+      padding: 24px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      flex: 1;
+      min-width: 160px;
+      background: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.06);
+    }
+
+    .stat .value {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .progress-list {
+      margin-top: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .progress-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      background: #fff;
+      padding: 14px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.04);
+      flex-wrap: wrap;
+    }
+
+    .course-info h4 {
+      margin: 0 0 4px;
+      font-size: 16px;
+    }
+
+    .progress-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 220px;
+      flex: 1;
+    }
+
+    .bar {
+      flex: 1;
+      height: 12px;
+      background: #eef3ff;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .bar .fill {
+      height: 100%;
+      background: linear-gradient(90deg,#6a11cb,#2575fc);
+      transition: width .6s ease;
+    }
+
+    .percent {
+      width: 48px;
+      text-align: right;
+      font-weight: 700;
+    }
+
+    @media (max-width: 640px) {
+      .progress-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .progress-wrapper {
+        width: 100%;
+      }
+
+      .percent {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="layout">
+  <aside class="sidebar">
+    <h2 class="logo">Genin-Path<span>.</span></h2>
+    <nav>
+      <a href="home.html">Dashboard</a>
+      <a href="home.html">Courses</a>
+      <a class="active">Progress</a>
+      <a href="student.html">Students</a>
+      <a href="profile.html">Profile</a>
+    </nav>
+    <div class="upgrade">
+      <p>Upgrade your account to Pro</p>
+      <button>Upgrade</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="welcome">
+        <h1>My Progress</h1>
+        <span id="username" style="font-size:18px;font-weight:600">User</span>
+      </div>
+      <div class="top-actions">
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+    <section class="progress-page">
+      <div class="stats">
+        <div class="stat">
+          <div class="label">Courses Enrolled</div>
+          <div class="value" id="stat-enrolled">—</div>
+        </div>
+        <div class="stat">
+          <div class="label">Completed</div>
+          <div class="value" id="stat-completed">—</div>
+        </div>
+        <div class="stat">
+          <div class="label">Average Progress</div>
+          <div class="value" id="stat-avg">—%</div>
+        </div>
+      </div>
+
+      <h3>Course Progress</h3>
+      <div class="progress-list" id="progressList"></div>
+    </section>
+  </main>
+</div>
+
+<script>
+  function readJSON(key, fallback = null) {
+    const raw = localStorage.getItem(key)
+    if (!raw) return fallback
+    try { return JSON.parse(raw) } catch { return fallback }
+  }
+
+  function getCurrentUser() {
+    const stored = readJSON("loggedInUser") || readJSON("currentUser")
+    if (!stored) return null
+    return typeof stored === "string" ? { name: stored } : stored
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const user = getCurrentUser()
+    if (!user) return location.href = "index.html"
+
+    const username =
+      user.name || user.username || user.email || "User"
+    document.getElementById("username").textContent = username
+
+    const enrolledRaw = localStorage.getItem("enrolledCourses")
+    let enrolledCourses = []
+
+    try {
+      const parsed = JSON.parse(enrolledRaw)
+      if (Array.isArray(parsed)) {
+        enrolledCourses = parsed.map(c =>
+          typeof c === "object" ? c.id || c.courseId : c
+        )
+      }
+    } catch {
+      if (enrolledRaw) {
+        enrolledCourses = enrolledRaw.split(",").map(v => v.trim())
+      }
+    }
+
+    const allCourses = readJSON("allCourses", [])
+    const progressStore = readJSON("progress", {})
+    const attemptStore = readJSON("quizAttempts", {})
+
+    const progressData =
+      progressStore[username]?.courses ||
+      progressStore[username] ||
+      {}
+
+    const list = document.getElementById("progressList")
+
+    let completed = 0
+    let totalPercent = 0
+
+    if (enrolledCourses.length === 0) {
+      list.innerHTML = `<div class="muted">No enrolled courses yet</div>`
+    }
+
+    enrolledCourses.forEach(courseId => {
+      const course =
+        allCourses.find(c => String(c.id) === String(courseId)) ||
+        { name: `Course ${courseId}`, category: "" }
+
+      let percent = 0
+      let attempted = 0
+      let total = 0
+
+      const progress = progressData[courseId]
+      const attempts = attemptStore[username]?.[courseId]
+
+      if (Array.isArray(attempts) && attempts.length) {
+        percent = Number(attempts.attempts?.score || attempts.at(-1)?.score) || 0
+      } else if (typeof progress === "number") {
+        percent = progress
+      } else if (typeof progress === "object") {
+        attempted = Number(progress.attempted) || 0
+        total = Number(progress.total) || 0
+        percent = total ? Math.round((attempted / total) * 100) : 0
+      }
+
+      if (percent >= 80) completed++
+      totalPercent += percent
+
+      const row = document.createElement("div")
+      row.className = "progress-row"
+
+      row.innerHTML = `
+        <div class="course-info">
+          <h4>${course.name}</h4>
+          <small>${course.category}</small><br>
+          <small>Attempted: ${attempted}/${total}</small>
+        </div>
+
+        <div class="progress-wrapper">
+          <div class="bar">
+            <div class="fill" style="width:${percent}%"></div>
+          </div>
+          <div class="percent">${percent}%</div>
+        </div>
+      `
+
+      list.appendChild(row)
+    })
+
+    document.getElementById("stat-enrolled").textContent = enrolledCourses.length
+    document.getElementById("stat-completed").textContent = completed
+    document.getElementById("stat-avg").textContent =
+      enrolledCourses.length
+        ? Math.round(totalPercent / enrolledCourses.length) + "%"
+        : "0%"
+  })
+
+  function logout() {
+    localStorage.clear()
+    location.href = "index.html"
+  }
+</script>
+
+</body>
+</html>

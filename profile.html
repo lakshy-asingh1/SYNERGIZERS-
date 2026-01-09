@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Profile | Genin-Path</title>
+  <link rel="stylesheet" href="home.css" />
+
+  <style>
+    .profile-main {
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .profile-card {
+      width: 100%;
+      max-width: 760px;
+    }
+
+    .bio {
+      background: #ffffff;
+      padding: 28px;
+      border-radius: 16px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+    }
+
+    .bio h3 {
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 14px;
+    }
+
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      color: #6b7280;
+    }
+
+    .value {
+      font-weight: 600;
+      color: #111827;
+      text-align: right;
+    }
+
+    .edit-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .btn-ghost {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg,#6a11cb,#2575fc);
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+      }
+
+      .value {
+        text-align: left;
+      }
+
+      .edit-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .edit-actions button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="layout">
+  <aside class="sidebar">
+    <h2 class="logo">Genin-Path<span>.</span></h2>
+    <nav>
+      <a onclick="showDashboard()">Dashboard</a>
+      <a onclick="showAllCourses()">Courses</a>
+      <a onclick="showProgress()">Progress</a>
+      <a class="active">Profile</a>
+    </nav>
+    <div class="upgrade">
+      <p>Upgrade your account to Pro</p>
+      <button>Upgrade</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="welcome">
+        <h4>My Profile</h4>
+        <span id="username">User</span>
+      </div>
+      <div class="top-actions">
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+    <div class="profile-main">
+      <div class="profile-card">
+        <div class="bio">
+          <h3>Personal Information</h3>
+
+          <div class="row"><span class="label">Full Name</span><span class="value" id="bioName">—</span></div>
+          <div class="row"><span class="label">Email</span><span class="value" id="bioEmail">—</span></div>
+          <div class="row"><span class="label">Enrolled Courses</span><span class="value" id="bioEnrolled">0</span></div>
+          <div class="row"><span class="label">Class / Program</span><span class="value" id="bioClass">—</span></div>
+          <div class="row"><span class="label">Date of Birth</span><span class="value" id="bioDob">—</span></div>
+          <div class="row"><span class="label">Gender</span><span class="value" id="bioGender">—</span></div>
+          <div class="row"><span class="label">Phone</span><span class="value" id="bioPhone">—</span></div>
+          <div class="row"><span class="label">Address</span><span class="value" id="bioAddress">—</span></div>
+
+          <div class="edit-actions">
+            <button class="btn-ghost" id="editProfileBtn">Edit Profile</button>
+            <button class="btn-primary" id="downloadBtn">Download Profile</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  function safeParse(key) {
+    const raw = localStorage.getItem(key)
+    if (!raw) return null
+    try { return JSON.parse(raw) } catch { return raw }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const stored = safeParse("currentUser") || safeParse("loggedInUser")
+    if (!stored) return location.href = "index.html"
+
+    const user = typeof stored === "string" ? { name: stored } : stored
+    const username = user.name || user.username || user.email || "User"
+    document.getElementById("username").textContent = username
+
+    const users = safeParse("users") || []
+    const enrolled = safeParse("enrolledCourses") || []
+    const enrolledCourses = Array.isArray(enrolled) ? enrolled : []
+
+    const profile = users.find(u =>
+      u.email === user.email || u.username === user.username
+    ) || user
+
+    bioName.textContent = profile.fullName || profile.name || "-"
+    bioEmail.textContent = profile.email || "-"
+    bioClass.textContent = profile.class || "-"
+    bioDob.textContent = profile.dob || "-"
+    bioGender.textContent = profile.gender || "-"
+    bioPhone.textContent = profile.phone || "-"
+    bioAddress.textContent = profile.address || "-"
+    bioEnrolled.textContent = enrolledCourses.length
+
+    editProfileBtn.onclick = () => location.href = "student.html"
+
+    downloadBtn.onclick = () => {
+      const data = JSON.stringify(profile, null, 2)
+      const blob = new Blob([data], { type: "application/json" })
+      const a = document.createElement("a")
+      a.href = URL.createObjectURL(blob)
+      a.download = "profile.json"
+      a.click()
+      URL.revokeObjectURL(a.href)
+    }
+  })
+
+  function logout() {
+    localStorage.clear()
+    location.href = "index.html"
+  }
+
+  function showDashboard(){ location.href = "home.html" }
+  function showAllCourses(){ location.href = "home.html#courses" }
+  function showProgress(){ location.href = "progress.html" }
+</script>
+
+</body>
+</html>

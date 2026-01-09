@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Enrolled Course</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:system-ui, sans-serif;
+}
+
+html,body{
+  height:100%;
+  background:#f4f6fb;
+}
+
+.header{
+  padding:16px;
+  text-align:center;
+  color:#fff;
+  font-size:20px;
+  font-weight:600;
+  background:linear-gradient(90deg,#6254fc,#4f6da5);
+}
+
+.course-layout{
+  display:flex;
+  flex-direction:column;
+  height:calc(100% - 60px);
+}
+
+.video-section{
+  background:#000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.video-section iframe{
+  width:100%;
+  max-width:900px;
+  aspect-ratio:16/9;
+  border:none;
+  border-radius:12px;
+}
+
+.course-details{
+  flex:1;
+  background:#fff;
+  padding:20px;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  gap:30px;
+}
+
+.course-details h2{
+  color:#111827;
+}
+
+.course-details p{
+  font-size:16px;
+  line-height:1.7;
+  color:#555;
+}
+
+.quiz-box{
+  max-width:850px;
+  margin:0 auto;
+  padding:25px;
+  border-radius:16px;
+  background:#f0f4ff;
+  border:2px solid #6254fc;
+}
+
+.quiz-box h3{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.question p{
+  font-size:16px;
+  font-weight:600;
+  margin-bottom:12px;
+}
+
+.options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.options label{
+  background:#fff;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #ddd;
+  cursor:pointer;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  transition:.2s;
+}
+
+.options label:hover{
+  background:#e6e9ff;
+  border-color:#6254fc;
+}
+
+.options input{
+  accent-color:#6254fc;
+}
+
+.action-btn{
+  margin:20px auto 0;
+  display:block;
+  padding:12px 24px;
+  font-size:15px;
+  font-weight:600;
+  border:none;
+  border-radius:8px;
+  background:#6254fc;
+  color:#fff;
+  cursor:pointer;
+}
+
+#result{
+  text-align:center;
+  font-weight:600;
+  margin-top:15px;
+}
+
+@media(max-width:768px){
+  .options{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header" id="courseTitle">Course</div>
+
+<div class="course-layout">
+
+  <div class="video-section">
+    <iframe id="videoPlayer" allowfullscreen></iframe>
+  </div>
+
+  <div class="course-details">
+    <div>
+      <h2>Description</h2>
+      <p id="courseDescription">Loading...</p>
+    </div>
+
+    <div class="quiz-box">
+      <h3>Quiz</h3>
+      <div class="question" id="questionBox"></div>
+      <button class="action-btn" id="nextBtn">Next</button>
+      <div id="result"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const courses = JSON.parse(localStorage.getItem("allCourses")) || [];
+  const courseId = Number(localStorage.getItem("currentCourseId"));
+  const course = courses.find(c => c.id === courseId);
+  if(!course) return;
+
+  document.getElementById("courseTitle").innerText = course.name;
+  document.getElementById("videoPlayer").src = course.video;
+  document.getElementById("courseDescription").innerText = course.description;
+
+  const questionBox = document.getElementById("questionBox");
+  const nextBtn = document.getElementById("nextBtn");
+  const result = document.getElementById("result");
+
+  let index = 0;
+  let score = 0;
+
+  function renderQuestion(){
+    const q = course.quiz[index];
+    if(!q) return finishQuiz();
+
+    result.innerText = "";
+    questionBox.innerHTML = `
+      <p>${index + 1}. ${q.question}</p>
+      <div class="options">
+        ${q.options.map(opt => `
+          <label>
+            <input type="radio" name="answer" value="${opt}">
+            ${opt}
+          </label>
+        `).join("")}
+      </div>
+    `;
+  }
+
+  nextBtn.onclick = () => {
+    const selected = document.querySelector('input[name="answer"]:checked');
+    if(!selected){
+      alert("Select an option first");
+      return;
+    }
+
+    if(selected.value === course.quiz[index].answer){
+      score++;
+      result.style.color = "green";
+      result.innerText = "Correct ✔";
+    }else{
+      result.style.color = "red";
+      result.innerText = "Wrong ✖";
+    }
+
+    index++;
+    setTimeout(renderQuestion, 900);
+  };
+
+  function finishQuiz(){
+    questionBox.innerHTML = `
+      <h3 style="text-align:center">Quiz Completed</h3>
+      <p style="text-align:center">Score: ${score} / ${course.quiz.length}</p>
+    `;
+    nextBtn.style.display = "none";
+    result.innerText = "";
+
+    const rawUser = localStorage.getItem("currentUser") || localStorage.getItem("loggedInUser");
+    const user = (() => { try { return JSON.parse(rawUser); } catch { return { name: rawUser }; } })();
+    const username = user?.name || user?.email || "guest";
+
+    const progress = JSON.parse(localStorage.getItem("progress") || "{}");
+    progress[username] ??= { courses:{} };
+    progress[username].courses[course.id] = { attempted:score, total:course.quiz.length };
+    localStorage.setItem("progress", JSON.stringify(progress));
+
+    const attempts = JSON.parse(localStorage.getItem("quizAttempts") || "{}");
+    attempts[username] ??= {};
+    attempts[username][course.id] ??= [];
+    attempts[username][course.id].push({
+      score: Math.round((score/course.quiz.length)*100),
+      time: Date.now()
+    });
+    localStorage.setItem("quizAttempts", JSON.stringify(attempts));
+  }
+
+  renderQuestion();
+});
+</script>
+
+</body>
+</html>
