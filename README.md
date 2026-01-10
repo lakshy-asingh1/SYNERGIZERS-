@@ -23,4 +23,4 @@ CSS – Styling and responsive layout
 
 JavaScript – Dynamic behavior and interactivity
 
-JSON – Data storage and management
+
