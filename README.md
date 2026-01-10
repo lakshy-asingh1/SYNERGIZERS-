@@ -2,7 +2,7 @@
 
 > The Online Learning Dashboard is a responsive web-based application designed to manage courses and track student learning progress. It provides a simple and intuitive interface for learners to view enrolled courses, monitor progress, and check completion status—all in one place.
 
-This project is ideal for educational platforms, student portals, or learning management system (LMS) prototypes.
+This project is ideal for educational platforms or student portals.
 
 ---
 
