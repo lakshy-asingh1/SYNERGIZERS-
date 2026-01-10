@@ -30,25 +30,24 @@ JSON - storing and transporting structured data, primarily for sending data betw
 
 
 
-📂 Project Structure :
+📂 **Project Structure:**
 
-SYNERGIZERS/
+📂 SYNERGIZERS/
 │
-├── index.html              # Main landing page
-├── about.html              # About us page
-├── courses.html            # Courses / learning modules
-├── contact.html            # Contact page
+├── 📄 index.html        # Main landing page
+├── 📄 about.html        # About us page
+├── 📄 courses.html      # Courses / learning modules
+├── 📄 contact.html      # Contact page
 │
-├── css/
-│   ├── style.css           # Main stylesheet
-│   ├── responsive.css      # Responsive design styles
+├── 📂 css/
+│   ├── 📄 style.css     # Main stylesheet
+│   ├── 📄 responsive.css # Responsive design styles
 │
-├── js/
-│   ├── script.js           # JavaScript functionality
+├── 📂 js/
+│   ├── 📄 script.js     # JavaScript functionality
 │
-├── assets/
-│   ├── images/             # Images used in the website
-│   ├── icons/              # Icons and logos
+├── 📂 assets/
+│   ├── 📂 images/       # Images used in the website
+│   ├── 📂 icons/        # Icons and logos
 │
-├── README.md               # Project documentation
-
+├── 📄 README.md         # Project documentation
