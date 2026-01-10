@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Genin-Path | Contact Us</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      /* Applied requested font family globally */
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: #f6f7fb;
+      color: #333;
+      line-height: 1.7;
+    }
+
+    /* ---------- NAVBAR ---------- */
+    header {
+      background: linear-gradient(90deg, #6254fc, #4f6da5);
+      padding: 14px 20px;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      font-size: 22px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      opacity: 0.95;
+    }
+
+    .btn-green {
+      background: #23c547;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      color: white;
+      text-decoration: none;
+    }
+
+    /* ---------- CONTACT SECTION ---------- */
+    .contact-wrapper {
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 0 20px;
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .info-section {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .info-section h1 {
+      color: #4E80DE;
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      letter-spacing: -1px;
+    }
+
+    .info-section p.tagline {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 35px;
+    }
+
+    .contact-detail-card {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+      border-left: 5px solid #6254fc;
+    }
+
+    .contact-detail-card h3 {
+      font-size: 13px;
+      text-transform: uppercase;
+      color: #6254fc;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .contact-detail-card p {
+      font-weight: 600;
+      font-size: 16px;
+      color: #222;
+    }
+
+    .contact-detail-card a {
+      color: #222;
+      text-decoration: none;
+      display: block;
+      font-weight: 600;
+    }
+
+    /* ---------- CONTACT FORM ---------- */
+    .form-section {
+      flex: 1.2;
+      min-width: 350px;
+      background: #fff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #444;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: all 0.3s;
+      background: #fcfcfc;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: #6254fc;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(98, 84, 252, 0.1);
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: #6254fc;
+      color: #fff;
+      border: none;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn-submit:hover {
+      background: #4f44d6;
+    }
+
+    /* ---------- FOOTER ---------- */
+    footer {
+      text-align: center;
+      font-size: 13px;
+      color: #777;
+      padding: 40px 15px;
+    }
+
+    footer a {
+      color: #777;
+      text-decoration: none;
+      margin: 0 6px;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 768px) {
+      .info-section h1 { font-size: 32px; }
+      .contact-wrapper { margin: 30px auto; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="nav-container">
+      <a href="/" class="logo">📘 Genin-Path</a>
+      <div class="nav-links">
+        <a href="#">Course Library</a>
+        <a href="#">About</a>
+        <a href="#">Log In</a>
+        <a href="#" class="btn-green">Join for Free</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="contact-wrapper">
+    
+    <div class="info-section">
+      <h1>Contact Us</h1>
+      <p class="tagline">Have questions or need assistance? Reach out to the Genin-Path team and let's start a conversation.</p>
+      
+      <div class="contact-detail-card">
+        <h3>Primary Emails</h3>
+        <a href="mailto:support@geninpath.com">support@geninpath.com</a>
+        <a href="mailto:hello@geninpath.com">hello@geninpath.com</a>
+      </div>
+
+      <div class="contact-detail-card">
+        <h3>Lucknow Office Helpline</h3>
+        <p>0522-4105567</p>
+        <p>0522-2789901</p>
+      </div>
+
+      <div class="contact-detail-card">
+        <h3>Our Headquarters</h3>
+        <p>Phase 2, Gomti Nagar, Lucknow, <br>Uttar Pradesh 226010</p>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <form>
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" placeholder="John Doe">
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="john@example.com">
+        </div>
+        <div class="form-group">
+          <label>How can we help?</label>
+          <textarea rows="5" placeholder="Tell us more about your inquiry..."></textarea>
+        </div>
+        <button type="button" class="btn-submit">Send Message</button>
+      </form>
+    </div>
+
+  </div>
+
+  <footer>
+    ©️ Genin-Path |
+    <a href="#">Terms of Use</a> |
+    <a href="#">Privacy Policy</a> |
+    <a href="#">About</a> |
+    <a href="#">FAQ</a> |
+    <a href="#">Contact Us</a>
+  </footer>
+
+</body>
+</html>
