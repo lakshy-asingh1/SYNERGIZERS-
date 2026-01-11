@@ -26,7 +26,7 @@ This project is ideal for educational platforms or student portals.
 
 * **JavaScript** – Dynamic behavior and interactivity
 
-* **JSON** - storing and transporting structured data, primarily for sending data between a server and web applications.
+* **JSON** - Works as a Local Storage
 
 ---
 
@@ -35,20 +35,25 @@ This project is ideal for educational platforms or student portals.
 
 📂 SYNERGIZERS/
 │
-├── index.html        # Main landing page
-├── about.html        # About us page
-├── courses.html      # Courses / learning modules
-├── contact.html      # Contact page
+├── index.html          # login page
+├── about.html          # About us page
+├── Contactus.html      # Contact page
+├── faq.html            # Frequently asked questions page
+├── policy.html         # Privacy Policy
+├── tou.html            # Terms of Use
 │
 ├── css/
-│   ├── style.css     # Main stylesheet
-│   ├── responsive.css # Responsive design styles
+│   ├── style.css       # Main stylesheet
+│   ├── responsive.css  # Responsive design styles
 │
-├── js/
-│   ├── script.js     # JavaScript functionality
 │
-├── assets/
-│   ├── images/       # Images used in the website
-│   ├── icons/        # Icons and logos
-│
-├── README.md         # Project documentation
+├── index.html/
+│           │       ├────────────────────────────────────────────────────────── ├── student.html/  # gives information about student
+│           │       │                                                           ├── progress.html/  # records the progress of student 
+│           │       │                                                           ├── profile.html/   # give access to edit the profile
+│           │       │                                                          
+│         ├── home.html/    # Main landing page                              
+│         ├── home.css/     # stylesheet                                     
+│         ├── home.js/      # JavaScript functionality
+│  
+├── README.md               # Project documentation
